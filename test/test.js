@@ -23,8 +23,18 @@ PalettoTestCase.prototype.testStory2 = function () {
 PalettoTestCase.prototype.testStory3 = function () {
     'use strict';
 
-
     assertTrue(e.get_marble_color("a6") === 'empty');
     assertTrue(e.number_marble() === 35);
     assertTrue(e.get_marble_player(0,"yellow") === 1);
+};
+
+PalettoTestCase.prototype.testStory4 = function () {
+    'use strict';
+
+    assertTrue(e.current_player() === 1);
+    assertTrue(e.can_play('blue') > 0);
+    assertTrue(e.can_play('black') > 0);
+    assertTrue(e.can_play('white') > 0);
+    assertTrue(e.play('black') === true);
+    assertTrue(e.get_marble_player(1,"black") === 2);
 };
