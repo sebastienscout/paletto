@@ -19,3 +19,12 @@ PalettoTestCase.prototype.testStory2 = function () {
     assertTrue(e.play('yellow') === true);
 
 };
+
+PalettoTestCase.prototype.testStory3 = function () {
+    'use strict';
+
+
+    assertTrue(e.get_marble_color("a6") === 'empty');
+    assertTrue(e.number_marble() === 35);
+    assertTrue(e.get_marble_player(0,"yellow") === 1);
+};
