@@ -8,7 +8,7 @@ var Engine = function () {
     //               0        1        2        3      4       5
     var colors = ['black', 'green', 'white', 'blue', 'red', 'yellow'];
 
-    var constructor = function(){
+    var constructor = function() {
         for (row = 0; row < 6; row ++) {
             grid[row] = [6];
         }
@@ -31,6 +31,16 @@ var Engine = function () {
     };
 // private attributes and methods
 
+    this.verify_juxtaposition = function() {
+        var test = 0;
+        for (row = 0; row < 5; row ++) {
+            for (col = 0; col < 5; col ++) {
+                test += (grid[row][col] === grid[row+1][col]);
+                test += (grid[row][col] === grid[row][col+1]);
+            }
+        }
+        return test === 0;
+    }
 
 
 // public methods
