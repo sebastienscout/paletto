@@ -15,7 +15,7 @@ PalettoTestCase.prototype.testStory1 = function () {
 PalettoTestCase.prototype.testStory2 = function () {
     'use strict';
 
-    assertTrue(e.current_player() === 1);
+    assertTrue(e.current_player() === 0);
     assertTrue(e.play('yellow') === true);
 
 };

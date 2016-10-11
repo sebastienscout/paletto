@@ -8,6 +8,8 @@ var Engine = function () {
     //               0        1        2        3      4       5
     var colors = ['black', 'green', 'white', 'blue', 'red', 'yellow'];
 
+    var current_player_id = 0;
+
     var constructor = function() {
         for (row = 0; row < 6; row ++) {
             grid[row] = [6];
@@ -29,7 +31,6 @@ var Engine = function () {
         row = Number(position.charAt(1)) - 1;
         return grid[row][col];
     };
-// private attributes and methods
 
     this.verify_juxtaposition = function() {
         var test = 0;
@@ -40,8 +41,31 @@ var Engine = function () {
             }
         }
         return test === 0;
-    }
+    };
 
+    this.current_player = function(){
+        return current_player_id;
+    };
 
-// public methods
+    this.play = function(color){
+        var test = false;
+
+        if(grid[0][0] === 'yellow') {
+            test = true;
+        }
+        else if(grid[5][0] === 'yellow') {
+            test = true;
+        }
+        else if(grid[0][5] === 'yellow') {
+            test = true;
+        }
+        else if(grid[5][5] === 'yellow') {
+            test = true;
+        }
+
+        current_player_id = (current_player_id+1)%2;
+
+        return test;
+    };
+
 };
