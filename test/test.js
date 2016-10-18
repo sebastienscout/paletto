@@ -32,9 +32,46 @@ PalettoTestCase.prototype.testStory4 = function () {
     'use strict';
 
     assertTrue(e.current_player() === 1);
-    assertTrue(e.can_play('blue') > 0);
-    assertTrue(e.can_play('black') > 0);
-    assertTrue(e.can_play('white') > 0);
+    assertTrue(e.can_play('blue').length > 0);
+    assertTrue(e.can_play('black').length  > 0);
+    assertTrue(e.can_play('white').length  > 0);
     assertTrue(e.play('black') === true);
     assertTrue(e.get_marble_player(1,"black") === 2);
 };
+
+PalettoTestCase.prototype.testStory5 = function () {
+    'use strict';
+    var e5 = new Engine();
+    e5.set_marble_color("a1","empty");
+    e5.set_marble_color("a2","empty");
+    e5.set_marble_color("a3","empty");
+    e5.set_marble_color("a5","empty");
+    e5.set_marble_color("a6","empty");
+    e5.set_marble_color("b1","empty");
+    e5.set_marble_color("b2","empty");
+    e5.set_marble_color("b3","empty");
+    e5.set_marble_color("b6","empty");
+    e5.set_marble_color("c1","empty");
+    e5.set_marble_color("c2","empty");
+    e5.set_marble_color("d4","empty");
+    e5.set_marble_color("d5","empty");
+    e5.set_marble_color("d6","empty");
+    e5.set_marble_color("e4","empty");
+    e5.set_marble_color("e5","empty");
+    e5.set_marble_color("e6","empty");
+    e5.set_marble_color("f2","empty");
+    e5.set_marble_color("f3","empty");
+    e5.set_marble_color("f4","empty");
+    e5.set_marble_color("f5","empty");
+    e5.set_marble_color("f6","empty");
+
+    assertTrue(e5.can_play('black').length > 0);
+    assertTrue(e5.can_play('white').length > 0);
+    assertTrue(e5.can_play('green').length > 0);
+    assertTrue(e5.can_play('red').length > 0);
+    assertTrue(e5.can_play('yellow').length === 0);
+    assertTrue(e5.can_play('blue').length === 1);
+
+};
+
+
