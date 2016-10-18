@@ -74,4 +74,24 @@ PalettoTestCase.prototype.testStory5 = function () {
 
 };
 
+PalettoTestCase.prototype.testStory6 = function () {
+    'use strict';
+    var e6 = new Engine();
+
+    e6.play('black');
+    e6.play('green');
+    e6.play('yellow');
+    e6.play('blue');
+    e6.play('white');
+    e6.play('red');
+    e6.play('blue');
+    e6.play('yellow');
+    e6.play('black');
+
+    assertTrue(e6.get_winner() === 0);
+
+};
+
+
+
 
