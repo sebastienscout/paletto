@@ -155,6 +155,17 @@ var Engine = function () {
         return pos_colors;
     };
 
+    this.get_winner = function () {
+        for (var player =0; player < players.length; player++) {
+            for (var index= 0; index<6; index++) {
+                if (players[player] [index] === 6) {
+                    return player;
+                }
+            }
+        }
+        return -1;
+    };
+
     this.affiche_log = function(){
         console.log("--------------");
         for (var i =0 ; i<6 ; i++){
@@ -164,5 +175,7 @@ var Engine = function () {
         console.log("--------------");
 
     };
+
+
 
 };
