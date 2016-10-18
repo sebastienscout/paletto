@@ -3,8 +3,6 @@
 var Engine = function () {
     "use strict";
     var grid = [6];
-    var row;
-    var col;
     //               0        1        2        3      4       5
     var colors = ['black', 'green', 'white', 'blue', 'red', 'yellow'];
 
@@ -13,6 +11,8 @@ var Engine = function () {
     var players = [new Array(6), new Array(6)];
 
     var constructor = function() {
+        var row;
+        var col;
         for (row = 0; row < 6; row ++) {
             grid[row] = [6];
             players [0] [row] =0;
@@ -30,14 +30,14 @@ var Engine = function () {
     constructor();
 
     this.get_marble_color = function (position) {
-        col = position.charCodeAt(0) - "a".charCodeAt(0);
-        row = Number(position.charAt(1)) - 1;
+        var col = position.charCodeAt(0) - "a".charCodeAt(0);
+        var row = Number(position.charAt(1)) - 1;
         return grid[row][col];
     };
 
     this.set_marble_color = function (_position, _color) {
-        col = _position.charCodeAt(0) - "a".charCodeAt(0);
-        row = Number(_position.charAt(1)) - 1;
+        var col = _position.charCodeAt(0) - "a".charCodeAt(0);
+        var row = Number(_position.charAt(1)) - 1;
         grid[row][col] = _color;
     };
 
@@ -46,12 +46,16 @@ var Engine = function () {
         return (col_letter + (_row+1).toString());
     };
 
-
+    this.get_grid_from_pos = function (position) {
+        var col = position.charCodeAt(0) - "a".charCodeAt(0);
+        var row = Number(position.charAt(1)) - 1;
+        return [row,col];
+    };
 
     this.verify_juxtaposition = function() {
         var test = 0;
-        for (row = 0; row < 5; row ++) {
-            for (col = 0; col < 5; col ++) {
+        for (var row = 0; row < 5; row ++) {
+            for (var col = 0; col < 5; col ++) {
                 test += (grid[row][col] === grid[row+1][col]);
                 test += (grid[row][col] === grid[row][col+1]);
             }
@@ -81,8 +85,8 @@ var Engine = function () {
     };
     this.number_marble = function() {
         var test = 0;
-        for (row = 0; row < 6; row ++) {
-            for (col = 0; col < 6; col ++) {
+        for (var row = 0; row < 6; row ++) {
+            for (var col = 0; col < 6; col ++) {
                 test += (grid[row][col] !== 'empty');
             }
         }
@@ -93,21 +97,64 @@ var Engine = function () {
          return players[player] [colors.indexOf(color)];
     };
 
-    this.is_valid = function(row, col){
+    this.get_neighbors = function (row, col) {
+
+        var neighbor = [];
         var nb_neighbor = 0;
 
-        nb_neighbor += (row < 5 && grid[row+1][col] !== 'empty');
-        nb_neighbor += (row > 0 && grid[row-1][col] !== 'empty');
-        nb_neighbor += (col < 5 && grid[row][col+1] !== 'empty');
-        nb_neighbor += (col > 0 && grid[row][col-1] !== 'empty');
+        if(row < 5 && grid[row+1][col] !== 'empty'){
+            neighbor[nb_neighbor] = this.get_pos_from_grid(row+1, col);
+            nb_neighbor++;
+        }
+        if(row > 0 && grid[row-1][col] !== 'empty'){
+            neighbor[nb_neighbor] = this.get_pos_from_grid(row-1, col);
+            nb_neighbor++;
+        }
+        if(col < 5 && grid[row][col+1] !== 'empty'){
+            neighbor[nb_neighbor] = this.get_pos_from_grid(row, col+1);
+            nb_neighbor++;
+        }
+        if(col > 0 && grid[row][col-1] !== 'empty'){
+            neighbor[nb_neighbor] = this.get_pos_from_grid(row, col-1);
+        }
+
+        return neighbor;
+    };
+
+    this.is_valid = function(row, col){
+        var neighbors = this.get_neighbors(row, col);
+        var nb_neighbor = neighbors.length;
+
+        if(nb_neighbor === 2){
+            var testNeighbor = 0;
+            var neighbor_neighbors = [];
+            var neighbor0 = this.get_grid_from_pos(neighbors[0]);
+            var neighbor1 = this.get_grid_from_pos(neighbors[1]);
+            neighbor_neighbors[0] = this.get_neighbors(neighbor0[0], neighbor0[1]);
+            neighbor_neighbors[1] = this.get_neighbors(neighbor1[0], neighbor1[1]);
+
+            for(var i=0; i<neighbor_neighbors[0].length;i++){
+                for(var j=0; j<neighbor_neighbors[1].length; j++){
+                    testNeighbor += (neighbor_neighbors[0][i] === neighbor_neighbors[1][j]);
+                }
+            }
+
+            if(testNeighbor === 2){
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
         return nb_neighbor < 3;
     };
 
     this.can_play = function(color){
         var pos_colors = [];
         var i = 0;
-        for (row = 0; row < 6; row ++) {
-            for (col = 0; col < 6; col ++) {
+        for (var row = 0; row < 6; row ++) {
+            for (var col = 0; col < 6; col ++) {
                 if(grid[row][col] === color && this.is_valid(row, col)){
                     pos_colors[i] = this.get_pos_from_grid(row, col);
                     i++;
@@ -117,5 +164,14 @@ var Engine = function () {
         return pos_colors;
     };
 
+    this.affiche_log = function(){
+        console.log("--------------");
+        for (var i =0 ; i<6 ; i++){
+            console.log( grid[i][0]+ " "+ grid[i][1]+ " "+ grid[i][2]+ " "+grid[i][3]+ " "+
+                grid[i][4]+ " "+grid[i][5]);
+        }
+        console.log("--------------");
+
+    };
 
 };
