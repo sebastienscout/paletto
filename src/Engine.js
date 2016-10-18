@@ -100,22 +100,18 @@ var Engine = function () {
     this.get_neighbors = function (row, col) {
 
         var neighbor = [];
-        var nb_neighbor = 0;
 
         if(row < 5 && grid[row+1][col] !== 'empty'){
-            neighbor[nb_neighbor] = this.get_pos_from_grid(row+1, col);
-            nb_neighbor++;
+            neighbor[neighbor.length] = this.get_pos_from_grid(row+1, col);
         }
         if(row > 0 && grid[row-1][col] !== 'empty'){
-            neighbor[nb_neighbor] = this.get_pos_from_grid(row-1, col);
-            nb_neighbor++;
+            neighbor[neighbor.length] = this.get_pos_from_grid(row-1, col);
         }
         if(col < 5 && grid[row][col+1] !== 'empty'){
-            neighbor[nb_neighbor] = this.get_pos_from_grid(row, col+1);
-            nb_neighbor++;
+            neighbor[neighbor.length] = this.get_pos_from_grid(row, col+1);
         }
         if(col > 0 && grid[row][col-1] !== 'empty'){
-            neighbor[nb_neighbor] = this.get_pos_from_grid(row, col-1);
+            neighbor[neighbor.length] = this.get_pos_from_grid(row, col-1);
         }
 
         return neighbor;
@@ -139,12 +135,7 @@ var Engine = function () {
                 }
             }
 
-            if(testNeighbor === 2){
-                return true;
-            }
-            else {
-                return false;
-            }
+            return testNeighbor === 2;
         }
 
         return nb_neighbor < 3;
