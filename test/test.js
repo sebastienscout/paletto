@@ -92,6 +92,33 @@ PalettoTestCase.prototype.testStory6 = function () {
 
 };
 
+PalettoTestCase.prototype.testStory7 = function () {
+    'use strict';
+    var e7= new Engine();
+
+    e7.play('black');
+    e7.play('yellow');
+    e7.play('white');
+    e7.play('green');
+    e7.play('blue');
+    e7.play('white');
+    e7.play('red');
+    e7.play('blue');
+    e7.play('yellow');
+    e7.play('black');
+    e7.play('green');
+    e7.play('red');
+    e7.play('white');
+    e7.play('blue');
+    e7.play('yellow');
+    e7.play('green');
+    e7.play('blue');
+    e7.play('black');
+    e7.play('red');
+
+    assertTrue(e7.get_winner() === 0);
+
+};
 
 
 
