@@ -10,6 +10,8 @@ var Engine = function () {
 
     var players = [new Array(6), new Array(6)];
 
+    var winner = -1;
+
     var constructor = function() {
         var row;
         var col;
@@ -69,6 +71,7 @@ var Engine = function () {
 
 
     this.play = function(color){
+
         var test = false;
         var num_play;
 
@@ -79,6 +82,7 @@ var Engine = function () {
             test = true;
         }
 
+        this.test_winner();
         current_player_id = (current_player_id+1)%2;
 
         return test;
@@ -97,6 +101,7 @@ var Engine = function () {
          return players[player] [colors.indexOf(color)];
     };
 
+    //noinspection OverlyComplexFunctionJS
     this.get_neighbors = function (row, col) {
 
         var neighbor = [];
@@ -155,27 +160,18 @@ var Engine = function () {
         return pos_colors;
     };
 
-    this.get_winner = function () {
-        for (var player =0; player < players.length; player++) {
-            for (var index= 0; index<6; index++) {
-                if (players[player] [index] === 6) {
-                    return player;
-                }
+    this.test_winner = function () {
+        for (var index= 0; index<6; index++) {
+            if (players[current_player_id] [index] === 6) {
+                    winner = current_player_id;
             }
         }
+        if (this.number_marble() === 0) { winner = current_player_id; }
         return -1;
     };
 
-    this.affiche_log = function(){
-        console.log("--------------");
-        for (var i =0 ; i<6 ; i++){
-            console.log( grid[i][0]+ " "+ grid[i][1]+ " "+ grid[i][2]+ " "+grid[i][3]+ " "+
-                grid[i][4]+ " "+grid[i][5]);
-        }
-        console.log("--------------");
-
+    this.get_winner = function () {
+        return winner;
     };
-
-
 
 };
