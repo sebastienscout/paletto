@@ -1,34 +1,106 @@
 
 
-var Engine = function () {
+var Engine = function (_playLength) {
     "use strict";
-    var grid = [6];
-    //               0        1        2        3      4       5
-    var colors = ['black', 'green', 'white', 'blue', 'red', 'yellow'];
+    var playLength;
+    if (_playLength > 6) {
+        playLength = _playLength;
+    } else {playLength = 6;}
+
+    var grid = [playLength];
+    //               0        1        2        3      4       5        6      7
+    var colors = ['black', 'green', 'white', 'blue', 'red', 'yellow','cyan','purple'];
 
     var current_player_id = 0;
 
-    var players = [new Array(6), new Array(6)];
+    var players = [new Array(playLength), new Array(playLength)];
 
     var winner = -1;
 
+    function shuffle(a_grid) {
+        var rand_index, tmp_index, cpt;
+        for (cpt = a_grid.length; cpt; cpt--) {
+            rand_index = Math.floor(Math.random() * cpt);
+            tmp_index = a_grid[cpt - 1];
+            a_grid[cpt - 1] = a_grid[rand_index];
+            a_grid[rand_index] = tmp_index;
+        }
+    }
+
+    function find_next(a_grid,index) {
+        var test = a_grid[index];
+        while (index < a_grid.length && a_grid[index] === test) {
+            index++;
+        }
+        return index;
+    }
+
+    function init_color_temp (a_color_temp,_length) {
+        var cpt;
+        for (cpt = 0; cpt < (_length * _length); cpt++){
+            a_color_temp [cpt] = cpt % _length;
+        }
+    }
+
+    function import_grid (a_colors_temp,a_grid,_length) {
+        for (var row = 0; row < _length; row ++) {
+            for (var col = 0; col < _length; col ++) {
+                a_grid[row][col] = colors[a_colors_temp[row*_length+col]];
+            }
+        }
+    }
+
+    function test_marble(a_index,a_color_temp,_length) {
+        var tmp;
+        var index;
+        if (a_color_temp[a_index-1] === a_color_temp[a_index]) {
+            index = find_next(a_color_temp,a_index);
+            tmp = a_color_temp[a_index];
+            a_color_temp[a_index] = a_color_temp[index];
+            a_color_temp[index] = tmp;
+        }
+        if (a_color_temp[a_index - _length] === a_color_temp[a_index]){
+            if (a_color_temp[a_index-1] === a_color_temp[a_index+1]) {
+                index = find_next(a_color_temp, a_index+1);
+            } else {
+                index = find_next(a_color_temp, a_index);
+            }
+            tmp = a_color_temp[a_index];
+            a_color_temp[a_index] = a_color_temp[index];
+            a_color_temp[index] = tmp;
+        }
+
+    }
+
+    var init_grid = function(_length) {
+        var max = _length * _length;
+        var colorsTemp = [];
+        init_color_temp(colorsTemp,_length);
+        var cpt;
+        shuffle(colorsTemp);
+        cpt=1;
+        while (cpt < max) {
+            test_marble(cpt,colorsTemp,_length);
+            cpt++;
+        }
+        return colorsTemp;
+    };
+
     var constructor = function() {
         var row;
-        var col;
-        for (row = 0; row < 6; row ++) {
-            grid[row] = [6];
+        for (row = 0; row < playLength; row ++) {
+            grid[row] = [playLength];
             players [0] [row] =0;
             players [1] [row] =0;
         }
-        var colorsTemp = [0,1,2,3,4,2,5,2,1,4,5,3,3,5,3,2,0,4,4,0,4,1,3,2,2,1,5,0,5,1,5,3,0,4,1,0];
-
-        for (row = 0; row < 6; row ++) {
-            for (col = 0; col < 6; col ++) {
-                grid[row][col] = colors[colorsTemp[row*6+col]];
-            }
+        var colorsTemp = [];
+        if (playLength > 6) {
+            colorsTemp = init_grid(playLength);
+        } else {
+            colorsTemp = [0,1,2,3,4,2,5,2,1,4,5,3,3,5,3,2,0,4,4,0,4,1,3,2,2,1,5,0,5,1,5,3,0,4,1,0];
         }
-
-    };
+        import_grid(colorsTemp,grid, playLength);
+     };
     constructor();
 
     this.get_marble_color = function (position) {
@@ -56,8 +128,8 @@ var Engine = function () {
 
     this.verify_juxtaposition = function() {
         var test = 0;
-        for (var row = 0; row < 5; row ++) {
-            for (var col = 0; col < 5; col ++) {
+        for (var row = 0; row < playLength-1; row ++) {
+            for (var col = 0; col < playLength-1; col ++) {
                 test += (grid[row][col] === grid[row+1][col]);
                 test += (grid[row][col] === grid[row][col+1]);
             }
@@ -89,8 +161,8 @@ var Engine = function () {
     };
     this.number_marble = function() {
         var test = 0;
-        for (var row = 0; row < 6; row ++) {
-            for (var col = 0; col < 6; col ++) {
+        for (var row = 0; row < playLength; row ++) {
+            for (var col = 0; col < playLength; col ++) {
                 test += (grid[row][col] !== 'empty');
             }
         }
@@ -106,13 +178,13 @@ var Engine = function () {
 
         var neighbor = [];
 
-        if(row < 5 && grid[row+1][col] !== 'empty'){
+        if(row < playLength-1 && grid[row+1][col] !== 'empty'){
             neighbor[neighbor.length] = this.get_pos_from_grid(row+1, col);
         }
         if(row > 0 && grid[row-1][col] !== 'empty'){
             neighbor[neighbor.length] = this.get_pos_from_grid(row-1, col);
         }
-        if(col < 5 && grid[row][col+1] !== 'empty'){
+        if(col < playLength-1 && grid[row][col+1] !== 'empty'){
             neighbor[neighbor.length] = this.get_pos_from_grid(row, col+1);
         }
         if(col > 0 && grid[row][col-1] !== 'empty'){
@@ -149,8 +221,8 @@ var Engine = function () {
     this.can_play = function(color){
         var pos_colors = [];
         var i = 0;
-        for (var row = 0; row < 6; row ++) {
-            for (var col = 0; col < 6; col ++) {
+        for (var row = 0; row < playLength; row ++) {
+            for (var col = 0; col < playLength; col ++) {
                 if(grid[row][col] === color && this.is_valid(row, col)){
                     pos_colors[i] = this.get_pos_from_grid(row, col);
                     i++;
@@ -161,8 +233,8 @@ var Engine = function () {
     };
 
     this.test_winner = function () {
-        for (var index= 0; index<6; index++) {
-            if (players[current_player_id] [index] === 6) {
+        for (var index= 0; index<playLength; index++) {
+            if (players[current_player_id] [index] === playLength) {
                     winner = current_player_id;
             }
         }
@@ -172,6 +244,17 @@ var Engine = function () {
 
     this.get_winner = function () {
         return winner;
+    };
+
+
+    this.print_log = function(){
+        console.log("--------------");
+        for (var i =0 ; i<playLength ; i++){
+            console.log( grid[i][0]+ "\t\t"+ grid[i][1]+ "\t\t"+ grid[i][2]+ "\t\t"+grid[i][3]+ "\t\t"+
+                grid[i][4]+ "\t\t"+grid[i][5]+ "\t\t"+grid[i][6]+ "\t\t"+grid[i][7]);
+        }
+        console.log("--------------");
+
     };
 
 };

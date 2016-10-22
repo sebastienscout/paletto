@@ -2,14 +2,15 @@
 
 var PalettoTestCase = TestCase("PalettoTestCase");
 
-var e = new Engine();
+var e;
 
 PalettoTestCase.prototype.testStory1 = function () {
     'use strict';
+    e = new Engine();
+
     assertTrue(e.get_marble_color("c3") === 'blue');
     assertTrue(e.get_marble_color("e5") === 'yellow');
     assertTrue(e.verify_juxtaposition() === true);
-
 };
 
 PalettoTestCase.prototype.testStory2 = function () {
@@ -77,7 +78,6 @@ PalettoTestCase.prototype.testStory5 = function () {
 PalettoTestCase.prototype.testStory6 = function () {
     'use strict';
     var e6 = new Engine();
-
     e6.play('black');
     e6.play('green');
     e6.play('yellow');
@@ -95,7 +95,6 @@ PalettoTestCase.prototype.testStory6 = function () {
 PalettoTestCase.prototype.testStory7 = function () {
     'use strict';
     var e7= new Engine();
-
     e7.play('black');
     e7.play('yellow');
     e7.play('white');
