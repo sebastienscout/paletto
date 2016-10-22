@@ -3,6 +3,7 @@
 var PalettoTestCase64 = TestCase("PalettoTestCase64");
 
 var e;
+var a_colors = ['black', 'green', 'white', 'blue', 'red', 'yellow','cyan','purple'];
 
 PalettoTestCase64.prototype.testStory64_1 = function () {
     'use strict';
@@ -25,15 +26,15 @@ PalettoTestCase64.prototype.testStory64_1 = function () {
 
 PalettoTestCase64.prototype.testStory64_2 = function () {
     'use strict';
-    var test_color;
+    var test_color = 0;
     var cpt = 0;
-    while (e.number_marble() > 0 && e.test_winner() < 0 && cpt < 100) {
+    while (e.number_marble() > 0 && e.get_winner() < 0 && cpt < 200) {
         test_color = Math.floor(Math.random() * 8);
-        e.play(e.get_color[test_color]);
+        e.play(a_colors[test_color]);
         cpt++; //evite boucle infinie
     }
     e.print_log();
-    assertTrue(e.test_winner() >= 0);
+    assertTrue(e.get_winner() >= 0);
 
 };
 

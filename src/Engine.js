@@ -69,7 +69,6 @@ var Engine = function (_playLength) {
             a_color_temp[a_index] = a_color_temp[index];
             a_color_temp[index] = tmp;
         }
-
     }
 
     var init_grid = function(_length) {
@@ -79,10 +78,11 @@ var Engine = function (_playLength) {
         var cpt;
         shuffle(colorsTemp);
         cpt=1;
-        while (cpt < max) {
+        while (cpt < max-1) {
             test_marble(cpt,colorsTemp,_length);
             cpt++;
         }
+
         return colorsTemp;
     };
 
@@ -99,6 +99,7 @@ var Engine = function (_playLength) {
         } else {
             colorsTemp = [0,1,2,3,4,2,5,2,1,4,5,3,3,5,3,2,0,4,4,0,4,1,3,2,2,1,5,0,5,1,5,3,0,4,1,0];
         }
+
         import_grid(colorsTemp,grid, playLength);
      };
     constructor();
